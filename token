@@ -1,0 +1,27 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.17;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+
+contract CustomToken is ERC20, ERC20Burnable, Ownable {
+    constructor(
+        address initialOwner
+    ) ERC20("Arvind", "AR") Ownable(initialOwner) {
+        _mint(initialOwner, 300 ); 
+    }
+
+    function mintTokens(address destination, uint256 mint_tokens) external onlyOwner {
+        _mint(destination, mint_tokens);
+    }
+
+    function burnTokens(uint256 burn_tokens) external {
+        _burn(msg.sender, burn_tokens);
+    }
+
+    function transfer(address destination, uint256 tokens) public virtual override returns (bool) {
+        _transfer(_msgSender(), destination, tokens);
+        return true;
+    }
+}
